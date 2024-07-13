@@ -1,5 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
+import "../styles/global.css";
 
 const HomePage = () => {
   const router = useRouter();
@@ -12,6 +13,7 @@ const HomePage = () => {
     <div>
       <h1>Home Page</h1>
       <button onClick={handleClick}>Go To Games Home</button>
+      <h1 className="text-3xl font-bold underline">Hello world!</h1>
     </div>
   );
 };

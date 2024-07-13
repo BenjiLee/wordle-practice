@@ -1,13 +1,9 @@
-export default function RootLayout({
-                                       children,
-                                   }: {
-    children: React.ReactNode
-}) {
-    return (<div>
-            <text>Games Layout</text>
-            <html lang="en">
-            <body>{children}</body>
-            </html>
-        </div>
-    )
+import { PropsWithChildren } from "react";
+
+export default function RootLayout({ children }: PropsWithChildren) {
+  return (
+    <html lang="en">
+      <body>{children}</body>
+    </html>
+  );
 }
