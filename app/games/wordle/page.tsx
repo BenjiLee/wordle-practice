@@ -1,7 +1,6 @@
 "use client";
 import { SetStateAction, useEffect, useState } from "react";
 
-const workBankWork = "Shelfy";
 const DEBUG = true;
 const LetterBox = ({
   answer,
@@ -19,6 +18,7 @@ const LetterBox = ({
   word: string;
 }) => {
   const [value, setValue] = useState("");
+  const upperCaseWord = word.toUpperCase();
 
   const handleChange = (event: { target: { value: string } }) => {
     if (event.target.value.length > 1) {
@@ -46,9 +46,7 @@ const LetterBox = ({
   if (reveal) {
     if (value.toUpperCase() === answer.toUpperCase()) {
       style = "bg-green-500";
-    } else if (
-      workBankWork.toUpperCase().split("").includes(value.toUpperCase())
-    ) {
+    } else if (upperCaseWord.split("").includes(value.toUpperCase())) {
       style = "bg-yellow-500";
     } else {
       style = "bg-gray-400";
@@ -120,7 +118,7 @@ const LetterBoxRow = ({
     <div className={"flex flex-row"}>
       {word.split("").map((answer, index) => (
         <LetterBox
-          key={"letterBox" + row + answer}
+          key={"letterBox" + row + answer + index}
           column={index}
           answer={answer}
           reveal={shouldReveal}
@@ -133,12 +131,24 @@ const LetterBoxRow = ({
   );
 };
 
+async function getData() {
+  const res = await fetch("/games/wordle/api", { cache: "force-cache" });
+  if (!res.ok) {
+    // This will activate the closest `error.js` Error Boundary
+    throw new Error("Failed to fetch data");
+  }
+  const word = await res.json();
+  return word.message;
+}
+
 const rows = [0, 1, 2, 3, 4];
 
 type RowState = "incomplete" | "wrong" | "correct";
-export default function WordlePage() {
+export default async function WordlePage() {
   const [currentRow, setCurrentRow] = useState(0);
   const [rowState, setRowState] = useState<RowState>("incomplete");
+  // const [randomWord, setRandomWord] = useState("-----");
+  const randomWord = "await";
 
   const onCheckWord = () => {
     switch (rowState) {
@@ -159,7 +169,7 @@ export default function WordlePage() {
       <div className={"flex flex-col"}>
         {rows.map((row, index) => (
           <LetterBoxRow
-            word={workBankWork}
+            word={randomWord.toUpperCase()}
             key={index}
             currentRow={currentRow}
             row={index}
